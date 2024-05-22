@@ -1,0 +1,5 @@
+This is a sample text file.
+It contains multiple lines of text.
+Each line is separated by a newline character.
+Buffering can help manage data efficiently.
+End of file.
