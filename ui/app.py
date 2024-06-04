@@ -4,8 +4,10 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 from src.synchronous import synchronous_read_write
 from src.asynchronous import async_main
-import asyncio
+from benchmark_sync import benchmark_sync
+from benchmark_async import benchmark_async
 import os
+import asyncio
 
 
 class BufferApp:
@@ -49,22 +51,29 @@ class BufferApp:
         )
         self.async_button.grid(row=2, column=0, columnspan=2, pady=10)
 
+        self.benchmark_button = ttk.Button(
+            self.frame, text="Benchmark", command=self.run_benchmark
+        )
+        self.benchmark_button.grid(row=3, column=0, columnspan=2, pady=10)
+
         # Barra de Progresso
         self.progress = ttk.Progressbar(
             self.frame, orient="horizontal", length=300, mode="determinate"
         )
-        self.progress.grid(row=3, column=0, columnspan=2, pady=10)
+        self.progress.grid(row=4, column=0, columnspan=2, pady=10)
 
         # Label de Status
         self.status_label = ttk.Label(self.frame, text="", background="#f0f0f0")
-        self.status_label.grid(row=4, column=0, columnspan=2, pady=5)
+        self.status_label.grid(row=5, column=0, columnspan=2, pady=5)
 
         # Bind redimensionamento da janela
         self.root.bind("<Configure>", self.resize_background)
 
     def resize_background(self, event):
-        new_width = event.width
-        new_height = event.height
+        new_width = max(event.width, 1)
+        new_height = max(
+            self.background_image.height * new_width // self.background_image.width, 1
+        )
         self.background_image_resized = self.background_image.resize(
             (new_width, new_height), Image.LANCZOS
         )
@@ -79,9 +88,11 @@ class BufferApp:
         self.root.update_idletasks()
 
     def start_sync_read_write(self):
-        input_file = filedialog.askopenfilename(title="Selecione o Arquivo de Entrada")
-        if not input_file:
-            messagebox.showerror("Erro", "Arquivo de entrada não selecionado.")
+        input_files = filedialog.askopenfilenames(
+            title="Selecione os Arquivos de Entrada"
+        )
+        if not input_files:
+            messagebox.showerror("Erro", "Arquivos de entrada não selecionados.")
             return
 
         output_file = filedialog.asksaveasfilename(title="Selecione o Arquivo de Saída")
@@ -97,13 +108,22 @@ class BufferApp:
             return
 
         buffer_size = int(buffer_size_str)
-        total_size = os.path.getsize(input_file)
+        total_size = sum(os.path.getsize(f) for f in input_files)
         self.progress["value"] = 0
         self.update_progress(0, total_size)
 
-        synchronous_read_write(
-            input_file, output_file, buffer_size, self.update_progress, total_size
-        )
+        for input_file in input_files:
+            try:
+                synchronous_read_write(
+                    input_file,
+                    output_file,
+                    buffer_size,
+                    self.update_progress,
+                    total_size,
+                )
+            except BufferError as e:
+                messagebox.showerror("Erro", str(e))
+                return
         self.status_label.config(text="Leitura/Escrita Síncrona Concluída")
         messagebox.showinfo("Sucesso", "Leitura/Escrita Síncrona Concluída")
 
@@ -130,13 +150,70 @@ class BufferApp:
         self.progress["value"] = 0
         self.update_progress(0, total_size)
 
-        asyncio.run(
-            async_main(
-                input_file, output_file, buffer_size, self.update_progress, total_size
+        try:
+            asyncio.run(
+                async_main(
+                    input_file,
+                    output_file,
+                    buffer_size,
+                    self.update_progress,
+                    total_size,
+                )
             )
-        )
+        except BufferError as e:
+            messagebox.showerror("Erro", str(e))
+            return
         self.status_label.config(text="Leitura/Escrita Assíncrona Concluída")
         messagebox.showinfo("Sucesso", "Leitura/Escrita Assíncrona Concluída")
+
+    def run_benchmark(self):
+        input_file = filedialog.askopenfilename(
+            title="Selecione o Arquivo de Entrada para Benchmark"
+        )
+        if not input_file:
+            messagebox.showerror("Erro", "Arquivo de entrada não selecionado.")
+            return
+
+        output_file_sync = filedialog.asksaveasfilename(
+            title="Selecione o Arquivo de Saída Síncrona"
+        )
+        if not output_file_sync:
+            messagebox.showerror("Erro", "Arquivo de saída síncrona não selecionado.")
+            return
+
+        output_file_async = filedialog.asksaveasfilename(
+            title="Selecione o Arquivo de Saída Assíncrona"
+        )
+        if not output_file_async:
+            messagebox.showerror("Erro", "Arquivo de saída assíncrona não selecionado.")
+            return
+
+        buffer_size_str = self.buffer_size_entry.get()
+        if not buffer_size_str.isdigit():
+            messagebox.showerror(
+                "Erro", "O tamanho do buffer deve ser um número inteiro."
+            )
+            return
+
+        buffer_size = int(buffer_size_str)
+
+        sync_time = benchmark_sync(input_file, output_file_sync, buffer_size)
+        async_time = benchmark_async(input_file, output_file_async, buffer_size)
+
+        print(f"Tempo de execução síncrona: {sync_time:.2f} segundos")
+        print(f"Tempo de execução assíncrona: {async_time:.2f} segundos")
+
+        with open("buffer_project.log", "a") as log_file:
+            log_file.write(
+                f"[Síncrono] Tempo de execução síncrona: {sync_time:.2f} segundos\n"
+            )
+            log_file.write(
+                f"[Assíncrono] Tempo de execução assíncrona: {async_time:.2f} segundos\n"
+            )
+
+        messagebox.showinfo(
+            "Benchmark", "Benchmark concluído. Verifique os logs para mais detalhes."
+        )
 
 
 def start_app():

@@ -1,0 +1,30 @@
+INFO:root:Tempo de execução síncrona: 0.12 segundos
+INFO:root:Tempo de execução assíncrona: 0.09 segundos
+INFO:root:Tempo de execução síncrona: 0.13 segundos
+INFO:root:Tempo de execução assíncrona: 0.17 segundos
+INFO:root:Tempo de execução síncrona: 0.09 segundos
+INFO:root:Tempo de execução assíncrona: 0.13 segundos
+INFO:root:Tempo de execução síncrona: 0.09 segundos
+INFO:root:Tempo de execução assíncrona: 0.11 segundos
+INFO:root:Tempo de execução síncrona: 0.09 segundos
+2024-06-04 19:57:27,678 - INFO - Tempo de execução síncrona: 0.09 segundos
+INFO:root:Tempo de execução assíncrona: 0.11 segundos
+2024-06-04 19:57:27,792 - INFO - Tempo de execução assíncrona: 0.11 segundos
+INFO:console_logger:Tempo de execução síncrona: 0.10 segundos
+2024-06-04 20:01:07,640 - INFO - Tempo de execução síncrona: 0.10 segundos
+INFO:file_logger:Tempo de execução síncrona: 0.10 segundos
+INFO:console_logger:Tempo de execução assíncrona: 0.10 segundos
+2024-06-04 20:01:07,737 - INFO - Tempo de execução assíncrona: 0.10 segundos
+INFO:file_logger:Tempo de execução assíncrona: 0.10 segundos
+INFO:console_logger:Tempo de execução síncrona: 0.11 segundos
+2024-06-04 20:03:23,496 - INFO - Tempo de execução síncrona: 0.11 segundos
+INFO:file_logger:Tempo de execução síncrona: 0.11 segundos
+INFO:console_logger:Tempo de execução assíncrona: 0.12 segundos
+2024-06-04 20:03:23,618 - INFO - Tempo de execução assíncrona: 0.12 segundos
+INFO:file_logger:Tempo de execução assíncrona: 0.12 segundos
+[Síncrono] Tempo de execução síncrona: 0.61 segundos
+[Assíncrono] Tempo de execução assíncrona: 0.82 segundos
+[Síncrono] Tempo de execução síncrona: 0.59 segundos
+[Assíncrono] Tempo de execução assíncrona: 0.73 segundos
+[Síncrono] Tempo de execução síncrona: 0.37 segundos
+[Assíncrono] Tempo de execução assíncrona: 0.43 segundos

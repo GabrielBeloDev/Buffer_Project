@@ -1,38 +1,63 @@
-import asyncio  # Importa a biblioteca asyncio para suporte a operações assíncronas
+import asyncio
+import logging
+
+logging.basicConfig(filename="buffer_project.log", level=logging.INFO)
 
 
-# Define a classe Buffer para operações síncronas
-class Buffer:
+def log_message(message):
+    logging.info(message)
+
+
+class CircularBufferSync:
     def __init__(self, size):
-        self.size = size  # Define o tamanho do buffer
-        self.buffer = []  # Inicializa a lista que armazena os dados do buffer
+        self.size = size
+        self.buffer = [None] * size
+        self.start = 0
+        self.end = 0
+        self.full = False
 
     def write_to_buffer(self, data):
-        self.buffer.append(data)  # Adiciona os dados ao buffer
+        if self.full:
+            raise BufferError("Buffer está cheio")
+        self.buffer[self.end] = data
+        self.end = (self.end + 1) % self.size
+        if self.end == self.start:
+            self.full = True
 
     def read_from_buffer(self):
-        if self.buffer:  # Verifica se há dados no buffer
-            return self.buffer.pop(0)  # Retorna e remove o primeiro item do buffer
-        else:
-            return None  # Retorna None se o buffer estiver vazio
+        if self.start == self.end and not self.full:
+            return None
+        data = self.buffer[self.start]
+        self.buffer[self.start] = None
+        self.start = (self.start + 1) % self.size
+        self.full = False
+        return data
 
 
-# Define a classe AsyncBuffer para operações assíncronas
-class AsyncBuffer:
+class CircularBufferAsync:
     def __init__(self, size):
-        self.size = size  # Define o tamanho do buffer
-        self.buffer = []  # Inicializa a lista que armazena os dados do buffer
-        self.lock = (
-            asyncio.Lock()
-        )  # Cria um bloqueio para gerenciar o acesso concorrente ao buffer
+        self.size = size
+        self.buffer = [None] * size
+        self.start = 0
+        self.end = 0
+        self.full = False
+        self.lock = asyncio.Lock()
 
     async def write_to_buffer(self, data):
-        async with self.lock:  # Adquire o bloqueio de forma assíncrona
-            self.buffer.append(data)  # Adiciona os dados ao buffer
+        async with self.lock:
+            if self.full:
+                raise BufferError("Buffer está cheio")
+            self.buffer[self.end] = data
+            self.end = (self.end + 1) % self.size
+            if self.end == self.start:
+                self.full = True
 
     async def read_from_buffer(self):
-        async with self.lock:  # Adquire o bloqueio de forma assíncrona
-            if self.buffer:  # Verifica se há dados no buffer
-                return self.buffer.pop(0)  # Retorna e remove o primeiro item do buffer
-            else:
-                return None  # Retorna None se o buffer estiver vazio
+        async with self.lock:
+            if self.start == self.end and not self.full:
+                return None
+            data = self.buffer[self.start]
+            self.buffer[self.start] = None
+            self.start = (self.start + 1) % self.size
+            self.full = False
+            return data
