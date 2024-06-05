@@ -17,9 +17,17 @@ class BufferApp:
         self.root.title("Buffering Read/Write")
         self.root.geometry("600x400")
 
+        # Configuração do logger
+        logging.basicConfig(
+            filename="benchmarking.log",
+            level=logging.INFO,
+            format="%(asctime)s - %(levelname)s - %(message)s",
+        )
+        self.logger = logging.getLogger()
+
         # Background Image
         script_dir = os.path.dirname(__file__)  # Localização do script atual
-        rel_path = "image/background3.jpg"
+        rel_path = "image/background.jpg"
         abs_file_path = os.path.join(script_dir, rel_path)
 
         # Verifica se o arquivo existe antes de tentar abrir
@@ -51,18 +59,21 @@ class BufferApp:
         self.buffer_size_entry = ttk.Entry(self.frame, style="info.TEntry")
         self.buffer_size_entry.grid(row=0, column=1, padx=5, pady=5, sticky=tk.E)
 
-        # Botões
+        # Configuração dos botões
+        button_width = 20
         style.configure(
             "Cyan.TButton",
             background="#00FFFF",
             foreground="#000000",
             font=("Helvetica", 10, "bold"),
         )
+
         self.sync_button = ttk.Button(
             self.frame,
             text="Leitura/Escrita Síncrona",
             command=self.start_sync_read_write,
             style="Cyan.TButton",
+            width=button_width,
         )
         self.sync_button.grid(row=1, column=0, columnspan=2, pady=10)
 
@@ -71,6 +82,7 @@ class BufferApp:
             text="Leitura/Escrita Assíncrona",
             command=self.start_async_read_write,
             style="Cyan.TButton",
+            width=button_width,
         )
         self.async_button.grid(row=2, column=0, columnspan=2, pady=10)
 
@@ -79,6 +91,7 @@ class BufferApp:
             text="Benchmark",
             command=self.run_benchmark,
             style="Cyan.TButton",
+            width=button_width,
         )
         self.benchmark_button.grid(row=3, column=0, columnspan=2, pady=10)
 
@@ -234,8 +247,8 @@ class BufferApp:
         async_time = benchmark_async(input_file, output_file_async, buffer_size)
 
         # Registrar os tempos de execução no log
-        logger.info(f"Tempo de execução síncrona: {sync_time:.2f} segundos")
-        logger.info(f"Tempo de execução assíncrona: {async_time:.2f} segundos")
+        self.logger.info(f"Tempo de execução síncrona: {sync_time:.2f} segundos")
+        self.logger.info(f"Tempo de execução assíncrona: {async_time:.2f} segundos")
 
         messagebox.showinfo(
             "Benchmark", "Benchmark concluído. Verifique os logs para mais detalhes."
@@ -250,12 +263,4 @@ def start_app():
 
 
 if __name__ == "__main__":
-    # Configuração do logger
-    logging.basicConfig(
-        filename="benchmarking.log",
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-    )
-    logger = logging.getLogger()
-
     start_app()
