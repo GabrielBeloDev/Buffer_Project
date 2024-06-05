@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 from tkinter import ttk
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk  # type: ignore
 from src.synchronous import synchronous_read_write
 from src.asynchronous import async_main
 from benchmark_sync import benchmark_sync
