@@ -1,1 +1,3 @@
+#pip install name of the package below
 Pillow
+ttkbootstrap
