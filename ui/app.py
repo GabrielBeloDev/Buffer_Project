@@ -27,7 +27,7 @@ class BufferApp:
 
         # Background Image
         script_dir = os.path.dirname(__file__)  # Localização do script atual
-        rel_path = "image/background.jpg"
+        rel_path = "image/background3.jpg"
         abs_file_path = os.path.join(script_dir, rel_path)
 
         # Verifica se o arquivo existe antes de tentar abrir
