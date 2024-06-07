@@ -136,13 +136,15 @@ class BufferApp:
 
     def start_sync_read_write(self):
         input_files = filedialog.askopenfilenames(
-            title="Selecione os Arquivos de Entrada"
+            title="Selecione o(s) Arquivo(s) de Entrada"
         )
         if not input_files:
-            messagebox.showerror("Erro", "Arquivos de entrada não selecionados.")
+            messagebox.showerror("Erro", "Arquivo(s) de entrada não selecionado(s).")
             return
 
-        output_file = filedialog.asksaveasfilename(title="Selecione o Arquivo de Saída")
+        output_file = filedialog.asksaveasfilename(
+            title="Escreva como deseja salvar o Arquivo de Saída"
+        )
         if not output_file:
             messagebox.showerror("Erro", "Arquivo de saída não selecionado.")
             return
@@ -175,12 +177,16 @@ class BufferApp:
         messagebox.showinfo("Sucesso", "Leitura/Escrita Síncrona Concluída")
 
     def start_async_read_write(self):
-        input_file = filedialog.askopenfilename(title="Selecione o Arquivo de Entrada")
+        input_file = filedialog.askopenfilename(
+            title="Selecione o(s) Arquivo(s) de Entrada"
+        )
         if not input_file:
             messagebox.showerror("Erro", "Arquivo de entrada não selecionado.")
             return
 
-        output_file = filedialog.asksaveasfilename(title="Selecione o Arquivo de Saída")
+        output_file = filedialog.asksaveasfilename(
+            title="Escreva como deseja salvar o Arquivo de Saída"
+        )
         if not output_file:
             messagebox.showerror("Erro", "Arquivo de saída não selecionado.")
             return
@@ -222,14 +228,14 @@ class BufferApp:
             return
 
         output_file_sync = filedialog.asksaveasfilename(
-            title="Selecione o Arquivo de Saída Síncrona"
+            title="Escreva como deseja salvar o Arquivo de Saída Síncrona"
         )
         if not output_file_sync:
             messagebox.showerror("Erro", "Arquivo de saída síncrona não selecionado.")
             return
 
         output_file_async = filedialog.asksaveasfilename(
-            title="Selecione o Arquivo de Saída Assíncrona"
+            title="Escreva como deseja salvar o Arquivo de Saída Assíncrona"
         )
         if not output_file_async:
             messagebox.showerror("Erro", "Arquivo de saída assíncrona não selecionado.")
