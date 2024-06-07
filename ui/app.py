@@ -60,7 +60,7 @@ class BufferApp:
         self.buffer_size_entry.grid(row=0, column=1, padx=5, pady=5, sticky=tk.E)
 
         # Configuração dos botões
-        button_width = 20
+        button_width = 22
         style.configure(
             "Cyan.TButton",
             background="#00FFFF",
