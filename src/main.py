@@ -12,10 +12,11 @@ from ui.app import start_app  # Importa a função start_app do módulo ui.app
 
 if __name__ == "__main__":  # Verifica se o script está sendo executado diretamente
     start_app()  # Inicia a aplicação chamando a função start_app
-import logging
+import logging  # Importa o módulo logging para registrar logs
 
+# Configura o logger para registrar logs em um arquivo chamado "buffer_project.log" no nível INFO
 logging.basicConfig(filename="buffer_project.log", level=logging.INFO)
 
-
+# Função para registrar uma mensagem de log
 def log_message(message):
     logging.info(message)
