@@ -93,7 +93,7 @@ No campo ao lado do rótulo "Tamanho do Buffer:", digite um número inteiro, por
 2. Selecione `new_input.txt` como arquivo de entrada.
 3. Dê um nome ao arquivo de saída síncrona, por exemplo, `output_sync_benchmark.txt`.
 4. Dê um nome ao arquivo de saída assíncrona, por exemplo, `output_async_benchmark.txt`.
-5. Verifique os resultados no terminal e no arquivo `benchmark.log`.
+5. Verifique os resultados no terminal e no arquivo `benchmarking.log`.
 
 ## Explicação do Fluxo
 
