@@ -73,7 +73,7 @@ cd Downloads/Buffer_Project
 ### Passo 3: Configure o PYTHONPATH (se necessário)
 
 ```sh
-export PYTHONPATH=$PYTHONPATH:Downloads/Buffer_project
+export PYTHONPATH=$PYTHONPATH:{caminho-para-o-projeto}
 ```
 
 ### Passo 4: Execute a aplicação
